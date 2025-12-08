@@ -1,0 +1,173 @@
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvTemplate {
+  [key: string]: string | undefined;
+}
+
+interface RedirectRule {
+  source: string;
+  has: { statuscode: number; pathname: string }[];
+}
+
+interface HeaderPolicy {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  urlPattern: string;
+  immutable?: boolean;
+  maxAgeSeconds: number;
+}
+
+interface FrameworkSettings {
+  vercel?: { [key: string]: any };
+  netlify?: { [key: string]: any };
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvTemplate;
+  redirects: RedirectRule[];
+  headers: HeaderPolicy[];
+  cacheStrategies: CacheStrategy[];
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY
+  },
+  redirects: [
+    {
+      source: "/old-url",
+      has: [{ statuscode: 301, pathname: "/new-url" }]
+    }
+  ],
+  headers: [
+    {
+      source: "*",
+      headers: [
+        { key: "strict-transport-security", value: "max-age=63072000; includeSubDomains; preload" },
+        { key: "x-content-type-options", value: "nosniff" },
+        { key: "x-frame-options", value: "DENY" }
+      ]
+    }
+  ],
+  cacheStrategies: [
+    {
+      urlPattern: "/api/*",
+      maxAgeSeconds: 0
+    },
+    {
+      urlPattern: "*.js",
+      immutable: true,
+      maxAgeSeconds: 31536000
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      buildContext: { NODE_ENV: "production" },
+      functions: ".vercel/functions"
+    }
+  }
+};
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvTemplate {
+  [key: string]: string | undefined;
+}
+
+interface RedirectRule {
+  source: string;
+  has: { statuscode: number; pathname: string }[];
+}
+
+interface HeaderPolicy {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  urlPattern: string;
+  immutable?: boolean;
+  maxAgeSeconds: number;
+}
+
+interface FrameworkSettings {
+  vercel?: { [key: string]: any };
+  netlify?: { [key: string]: any };
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvTemplate;
+  redirects: RedirectRule[];
+  headers: HeaderPolicy[];
+  cacheStrategies: CacheStrategy[];
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY
+  },
+  redirects: [
+    {
+      source: "/old-url",
+      has: [{ statuscode: 301, pathname: "/new-url" }]
+    }
+  ],
+  headers: [
+    {
+      source: "*",
+      headers: [
+        { key: "strict-transport-security", value: "max-age=63072000; includeSubDomains; preload" },
+        { key: "x-content-type-options", value: "nosniff" },
+        { key: "x-frame-options", value: "DENY" }
+      ]
+    }
+  ],
+  cacheStrategies: [
+    {
+      urlPattern: "/api/*",
+      maxAgeSeconds: 0
+    },
+    {
+      urlPattern: "*.js",
+      immutable: true,
+      maxAgeSeconds: 31536000
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      buildContext: { NODE_ENV: "production" },
+      functions: ".vercel/functions"
+    }
+  }
+};
